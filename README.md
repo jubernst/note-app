@@ -1,4 +1,4 @@
-# Note Taker Starter Code
+# Note Taker
 
 The following API routes should be created:
 
