@@ -1,16 +1,7 @@
 [
     {
         "title": "Test Title",
-        "text": "Test text"
-    },
-    {
-        "title": "Blah Blah",
-        "text": "I need a note!",
-        "id": "473fdisklf7aovgq"
-    },
-    {
-        "title": "MyTitle",
-        "text": "my test",
-        "id": "473fdisklf7aubr9"
+        "text": "Test text",
+        "id": "1"
     }
 ]

@@ -7,10 +7,10 @@ var uniqid = require("uniqid");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// TODO: Invoke app.use() and serve static files from the '/public' folder
+// Serve static files from the '/public' folder
 app.use(express.static("./public"));
 
-// Sets up the Express app to handle data parsing and urlencoded data
+// Handle data parsing and urlencoded data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -22,16 +22,23 @@ app.get("/notes", (req, res) =>
   res.sendFile(path.join(__dirname, "public/notes.html"))
 );
 
-// GET request for notes
+// GET route for retrieving all notes
 app.get("/api/notes", (req, res) => {
-  // Send the notes to the client in json
-  res.status(200).json(noteData);
-
   // Log our GET request to the terminal
   console.info(`${req.method} request received to get notes`);
+
+  // Read the file
+  fs.readFile("./db/db.json", "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      // Return notes to client as JSON
+      res.json(JSON.parse(data));
+    }
+  });
 });
 
-// POST request to add a new note
+// POST route to add a new note
 app.post("/api/notes", (req, res) => {
   // Log that a POST request was received
   console.info(`${req.method} request received to add a note`);
@@ -67,9 +74,6 @@ app.post("/api/notes", (req, res) => {
               ? console.error(writeErr)
               : console.info("Successfully updated notes")
         );
-        // Then the new note needs to be rendered in the sidebar. This should be on the
-        // client side? but it's not happening
-        // i am saving the notes to the json file properly and everything
       }
     });
 
@@ -86,17 +90,21 @@ app.post("/api/notes", (req, res) => {
   }
 });
 
-// DELETE request to delete a note from a given id
+// DELETE route to delete a note from a given id
+// A known issue with the delete route is that it
 app.delete("/api/notes/:id", (req, res) => {
   // Log that a DEL request was received
   console.info(`${req.method} request received to delete a note`);
 
+  // Get the id of the requested note
   const requestedId = req.params.id;
 
-  // Iterate through the note ids to check if it matches `req.params.id`
+  // Iterate through the data to find the note with the requested id
   if (requestedId) {
     for (let i = 0; i < noteData.length; i++) {
       if (requestedId === noteData[i].id) {
+        const requestedNote = noteData[i];
+
         fs.readFile("./db/db.json", "utf8", (err, data) => {
           if (err) {
             console.error(err);
@@ -104,27 +112,33 @@ app.delete("/api/notes/:id", (req, res) => {
             // Convert string into a JSON object
             const parsedNotes = JSON.parse(data);
 
-            // Splice the review out of the array
+            // Splice the requested note out of the array
             parsedNotes.splice(i, 1);
 
             // Write updated notes back to the file
             fs.writeFile(
-              "./db/reviews.json",
+              "./db/db.json",
               JSON.stringify(parsedNotes, null, 4),
               (writeErr) =>
                 writeErr
                   ? console.error(writeErr)
-                  : console.info("Successfully deleted the note!")
+                  : console.info("Successfully deleted the note")
             );
+
+            // Prepare a response to send to the client
+            const response = {
+              status: "success",
+              data: requestedNote,
+            };
+
+            res.status(201).json(response);
           }
         });
-        return res.json(noteData[i]);
       }
     }
+  } else {
+    return res.json("ID not found");
   }
-
-  // Return a message if the id doesn't exist in our DB
-  return res.json("ID not found");
 });
 
 app.listen(PORT, () =>
