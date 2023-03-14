@@ -1,7 +1,43 @@
-# Note Taker
+# Note Taker [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-The following API routes should be created:
+## Description
 
-    GET /api/notes should read the db.json file and return all saved notes as JSON.
+An online app that allows the user to write, save and delete notes. By keeping notes online, the user ensures that they won't lose important information, and that their notes are always available. Made using Express.js and deployed to Heroku.
 
-    POST /api/notes should receive a new note to save on the request body, add it to the db.json file, and then return the new note to the client. You'll need to find a way to give each note a unique id when it's saved (look into npm packages that could do this for you).
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Tests](#tests)
+- [License](#license)
+- [Questions](#questions)
+
+## Installation
+
+Requires Express.js and Uniqid, from Node.js. In the command line, run:
+
+```
+npm install express
+npm install uniqid
+```
+
+## Usage
+
+Visit the application URL
+
+## Contributing
+
+N/A
+
+## Tests
+
+There is currently no testing implemented.
+
+## License
+
+This work is available under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Questions
+
+If you have any questions, contact me directly at [julia.bernst@gmail.com](mailto:julia.bernst@gmail.com). You can find more of my work at my [Github](https://github.com/jubernst/).

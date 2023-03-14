@@ -91,7 +91,6 @@ app.post("/api/notes", (req, res) => {
 });
 
 // DELETE route to delete a note from a given id
-// A known issue with the delete route is that it
 app.delete("/api/notes/:id", (req, res) => {
   // Log that a DEL request was received
   console.info(`${req.method} request received to delete a note`);
